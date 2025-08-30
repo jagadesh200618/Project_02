@@ -8,9 +8,8 @@ data = pd.read_csv("dataset.csv")
 yearsExperience = Variable(torch.tensor(data[["YearsExperience"]].to_numpy()))
 salary = Variable(torch.tensor(data[["Salary"]].to_numpy()))
 
-# Plotting the data
-# plt.scatter(yearsExperience, salary)
-# plt.show()
+# Plotting the original data
+plt.scatter(yearsExperience, salary)
 
 # LinearRegression
 class LinearRegression(torch.nn.Module):
@@ -29,7 +28,7 @@ optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
 
 loss_list = []
 
-for epoch in range(500):
+for epoch in range(10):
     # 1. predict current salary
     salary_pred = model(yearsExperience)
     # 2. compute loss from original
@@ -42,8 +41,12 @@ for epoch in range(500):
     loss_list.append(loss.item())
     print(f"Epoch: {epoch}, loss: {loss_list[-1]}")
 
+parameter = model.parameters()
 
-grad = list(map(float, loss_list))
-print(grad)
-plt.plot(grad)
+m = next(parameter).detach().numpy()
+c = next(parameter).detach().numpy()
+
+experience = yearsExperience.detach().numpy()
+Y = m * experience + c
+plt.plot(experience, Y)
 plt.show()
