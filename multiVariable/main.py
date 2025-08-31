@@ -5,14 +5,9 @@ from torch.autograd import Variable
 
 # Importing the data
 data = pd.read_csv("multi.csv")
-size = Variable(torch.tensor(data[["size"]].to_numpy()))
-location_score = Variable(torch.tensor(data[["location_score"]].to_numpy()))
-age = Variable(torch.tensor(data[["age"]].to_numpy()))
-price = Variable(torch.tensor(data[["price"]].to_numpy()))
-rental_yield = Variable(torch.tensor(data[["rental_yield"]].to_numpy()))
+input = torch.tensor(data[["size", "location_score", "age"]].to_numpy())
+output = torch.tensor(data[["price", "rental_yield"]].to_numpy())
 
-# Plotting the original data
-plt.scatter(size, location_score, age, price, rental_yield)
 
 # LinearRegression
 class LinearRegression(torch.nn.Module):
@@ -20,8 +15,8 @@ class LinearRegression(torch.nn.Module):
         super(LinearRegression, self).__init__()
         self.linear = torch.nn.Linear(3,2, dtype=torch.float64)
 
-    def forward(self, x,y,z):
-        return self.linear(x,y,z)
+    def forward(self, x):
+        return self.linear(x)
 
 
 # Executing
@@ -33,9 +28,9 @@ loss_list = []
 
 for epoch in range(10):
     # 1. predict current
-    price, rental_yield = model(size,age,location_score)
+    prediction = model(input)
     # 2. compute loss from original
-    loss = criterion(price, salary)
+    loss = criterion(output, prediction)
     # 3. Calculating gradient
     optimizer.zero_grad()
     loss.backward()
@@ -44,9 +39,6 @@ for epoch in range(10):
     loss_list.append(loss.item())
     print(f"Epoch: {epoch}, loss: {loss_list[-1]}")
 
-m, c = list(model.parameters())
+m = list(model.parameters())
+print(m)
 
-experience = yearsExperience
-Y = m * experience + c
-plt.plot(experience, Y.detach())
-plt.show()
