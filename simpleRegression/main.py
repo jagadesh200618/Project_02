@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from torch.autograd import Variable
 
 # Importing the data
-data = pd.read_csv("dataset.csv")
+data = pd.read_csv("data.csv")
 yearsExperience = Variable(torch.tensor(data[["YearsExperience"]].to_numpy()))
 salary = Variable(torch.tensor(data[["Salary"]].to_numpy()))
 
@@ -41,12 +41,9 @@ for epoch in range(10):
     loss_list.append(loss.item())
     print(f"Epoch: {epoch}, loss: {loss_list[-1]}")
 
-parameter = model.parameters()
+m, c = list(model.parameters())
 
-m = next(parameter).detach().numpy()
-c = next(parameter).detach().numpy()
-
-experience = yearsExperience.detach().numpy()
+experience = yearsExperience
 Y = m * experience + c
-plt.plot(experience, Y)
+plt.plot(experience, Y.detach())
 plt.show()

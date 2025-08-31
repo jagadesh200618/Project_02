@@ -5,6 +5,7 @@
 ### Todo
 
 - [ ] Simple Linear Regression  Y = m X + c
+- [ ] Multi Variable Linear Regression
 
 ------
 
