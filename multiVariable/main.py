@@ -22,11 +22,11 @@ class LinearRegression(torch.nn.Module):
 # Executing
 model = LinearRegression()
 criterion = torch.nn.MSELoss()
-optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
+optimizer = torch.optim.SGD(model.parameters(), lr = 0.00001)
 
 loss_list = []
 
-for epoch in range(10):
+for epoch in range(100):
     # 1. predict current
     prediction = model(input)
     # 2. compute loss from original
@@ -39,6 +39,8 @@ for epoch in range(10):
     loss_list.append(loss.item())
     print(f"Epoch: {epoch}, loss: {loss_list[-1]}")
 
-m = list(model.parameters())
-print(m)
+m, c = list(model.parameters())
+x = torch.tensor([1312.037280884873,6,45], dtype=torch.float64)
+y = torch.matmul(m,x) + c
+print(y)
 
